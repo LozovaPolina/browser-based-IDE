@@ -1,26 +1,69 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import * as esbuild from 'esbuild-wasm';
+import React, {ChangeEvent, useCallback, useEffect, useRef, useState} from 'react';
+import {unpkgPathPlugin} from "./plugins/unpkg-path-plugin";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+
+	const [input, setInput] = useState('');
+	const [code, setCode] = useState('');
+
+	const esbuildInitializedRef = useRef<Boolean>(false);
+
+	const onClickHandler = async () => {
+		if(!esbuildInitializedRef.current) return;
+
+		try{
+			const res = await esbuild.build({
+				entryPoints: ['index.js'],
+				bundle: true,
+				write: false,
+				plugins: [unpkgPathPlugin()],
+				define: {
+					'process.env.NODE_ENV': '"production"',
+					global: 'window',
+				}
+			});
+
+			setCode(res.outputFiles[0].text)
+		}catch(err){
+
+
+			console.error(err);
+		}
+	};
+
+
+
+
+
+	const startService = useCallback(async () => {
+		try {
+			await esbuild.initialize({
+				worker: true,
+				wasmURL: '/esbuild.wasm'
+			});
+			esbuildInitializedRef.current = true;
+		} catch(err) {
+			esbuildInitializedRef.current = false;
+			console.log(err)
+		}
+
+
+	}, []);
+
+	useEffect(()=> {
+		startService();
+	}, [])
+
+	return (
+		<div>
+			<textarea value={input} onChange={(e:ChangeEvent<HTMLTextAreaElement>) => setInput(e.target.value)}></textarea>
+			<div>
+				<button onClick={onClickHandler}>Submit</button>
+			</div>
+			<pre>{code}</pre>
+		</div>
+	);
+};
 
 export default App;
