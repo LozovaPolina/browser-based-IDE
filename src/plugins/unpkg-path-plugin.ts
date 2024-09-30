@@ -1,5 +1,14 @@
 import * as esbuild from 'esbuild-wasm';
-const URL_UNPKG = 'https://unpkg.com'
+import * as localForage from "localforage";
+
+const URL_UNPKG = 'https://unpkg.com';
+
+const fileCache = localForage.createInstance({
+	name: 'file_cache',
+});
+
+
+
 export const unpkgPathPlugin = () => {
 	return {
 		name: 'unpkg-path-plugin',
@@ -28,11 +37,20 @@ export const unpkgPathPlugin = () => {
 					return {
 						loader: 'jsx',
 						contents: `
-					  import message from 'react-dom';
+					  import message from 'react';
 					  console.log(message);
                 	`,
 					};
-				}else {
+				} else {
+					// check to see if we have already fetched this file
+					// adn if it is in cache
+
+					const cachedResult  = await fileCache.getItem<esbuild.OnLoadResult>(args.path);
+
+
+					// if it is, return it immediately
+					if(cachedResult) {return cachedResult}
+
 
 					try{
 						const res = await fetch(args.path);
@@ -40,14 +58,23 @@ export const unpkgPathPlugin = () => {
 						if(!res.ok) {
 							throw new Error('Could not ot fetch the data!');
 						}
+
 						const resData = await res.text();
 
-						console.log(resData, 'resdata')
-						return {
+
+						console.log(resData, 'resdata');
+
+						const result: esbuild.OnLoadResult = {
 							loader: 'jsx',
 							contents: resData,
 							resolveDir: new URL ('./', res.url ).pathname
-						}
+						};
+
+						// store resData in cache
+						await fileCache.setItem(args.path, result);
+
+						return result
+
 					}catch (err) {
 						console.log(err)
 					}
