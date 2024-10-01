@@ -21,10 +21,10 @@ export const fetchPlugin = (inputCode: string) => {
 					// check to see if we have already fetched this file
 					// adn if it is in cache
 
-					const cachedResult  = await fileCache.getItem<esbuild.OnLoadResult>(args.path);
-
-					// if it is, return it immediately
-					if(cachedResult) {return cachedResult}
+					// const cachedResult  = await fileCache.getItem<esbuild.OnLoadResult>(args.path);
+					//
+					// // if it is, return it immediately
+					// if(cachedResult) {return cachedResult}
 
 					try{
 						const res = await fetch(args.path);
@@ -35,11 +35,24 @@ export const fetchPlugin = (inputCode: string) => {
 
 						const resData = await res.text();
 
-						console.log(resData, 'resdata');
+
+						// console.log(resData, 'resData');
+
+						const fileType = args.path.match(/.css$/) ? 'css' : 'jsx';
+						const escaped = resData
+							.replace(/\n/g, '')
+							.replace(/"/g, '\\"')
+							.replace(/'/g, "\\'")
+
+						const contents = fileType === 'css' ? `
+							const style = document.createElement('style');
+							style.innerText = '${escaped}';
+							document.head.appendChild(style);
+						` : resData;
 
 						const result: esbuild.OnLoadResult = {
 							loader: 'jsx',
-							contents: resData,
+							contents,
 							resolveDir: new URL ('./', res.url ).pathname
 						};
 
