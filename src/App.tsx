@@ -27,8 +27,6 @@ const App = () => {
 
 			setCode(res.outputFiles[0].text)
 		}catch(err){
-
-
 			console.error(err);
 		}
 	};
