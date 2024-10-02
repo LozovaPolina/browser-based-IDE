@@ -31,23 +31,17 @@ const App = () => {
 		}
 	};
 
-
-
-
-
 	const startService = useCallback(async () => {
 		try {
 			await esbuild.initialize({
 				worker: true,
-				wasmURL: '/esbuild.wasm'
+				wasmURL: 'https://unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm'
 			});
 			esbuildInitializedRef.current = true;
 		} catch(err) {
 			esbuildInitializedRef.current = false;
 			console.log(err)
 		}
-
-
 	}, []);
 
 	useEffect(()=> {
