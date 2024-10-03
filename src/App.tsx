@@ -59,7 +59,13 @@ const App = () => {
 				<div id="user-root"></div>
 				<script>
 					window.addEventListener('message', (e) => {
-						eval(e.data);
+						try{
+							eval(e.data);
+						}catch (err) {
+							console.error(err);
+							const userRoot = document.querySelector('#user-root');
+							userRoot.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + err + '</div>'
+						}
 					},false);
 				</script>
 			</body>
