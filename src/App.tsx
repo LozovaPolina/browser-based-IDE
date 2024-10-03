@@ -6,12 +6,34 @@ import {fetchPlugin} from "./plugins/fetch-plugin";
 const App = () => {
 	const iframeRef = useRef<any>()
 	const [input, setInput] = useState('');
-	const [code, setCode] = useState('');
+	// const [code, setCode] = useState('');
 
 	const esbuildInitializedRef = useRef<Boolean>(false);
 
+	const html = `
+		<html>
+			<head></head>
+			<body>
+				<div id="user-root"></div>
+				<script>
+					window.addEventListener('message', (e) => {
+						try{
+							eval(e.data);
+						}catch (err) {
+							console.error(err);
+							const userRoot = document.querySelector('#user-root');
+							userRoot.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + err + '</div>'
+						}
+					},false);
+				</script>
+			</body>
+		</html>	
+	`;
+
 	const onClickHandler = async () => {
 		if(!esbuildInitializedRef.current) return;
+
+		iframeRef.current.srcdoc = html;
 
 		try{
 			const res = await esbuild.build({
@@ -52,25 +74,7 @@ const App = () => {
 	}, [startService]);
 
 
-	const html = `
-		<html>
-			<head></head>
-			<body>
-				<div id="user-root"></div>
-				<script>
-					window.addEventListener('message', (e) => {
-						try{
-							eval(e.data);
-						}catch (err) {
-							console.error(err);
-							const userRoot = document.querySelector('#user-root');
-							userRoot.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + err + '</div>'
-						}
-					},false);
-				</script>
-			</body>
-		</html>	
-	`;
+
 
 	return (
 
@@ -79,7 +83,7 @@ const App = () => {
 			<div>
 				<button onClick={onClickHandler}>Submit</button>
 			</div>
-			<pre>{code}</pre>
+			{/*<pre>{code}</pre>*/}
 			<iframe ref={iframeRef} title='users-code' srcDoc={html} sandbox='allow-scripts'/>
 		</div>
 	);
