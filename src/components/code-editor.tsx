@@ -1,9 +1,12 @@
+import styles from './code-editor.module.css'
 import MonacoEditor, {type OnMount} from '@monaco-editor/react';
 import React, {useRef} from "react";
 import {editor} from "monaco-editor";
 import prettier from "prettier/standalone";
 import babelPlugin from "prettier/plugins/babel";
 import estreePlugin from "prettier/plugins/estree";
+import 'bulmaswatch/darkly/bulmaswatch.min.css';
+
 
 type CodeEditorProps = {
 	initialValue: string;
@@ -13,7 +16,6 @@ type CodeEditorProps = {
 const CodeEditor: React.FC<CodeEditorProps> = ({initialValue,onChange}) => {
 	const editorRef = useRef<editor.IStandaloneCodeEditor>()
 	const  onFormatClick = async () => {
-
 		if (!editorRef.current) return;
 		//get cur value from editor
 		const unformatted = editorRef.current.getValue();
@@ -25,21 +27,23 @@ const CodeEditor: React.FC<CodeEditorProps> = ({initialValue,onChange}) => {
 			useTabs: false,
 			semi: true,
 			singleQuote: true,
-		});
+		}).then(res => res.replace(/\n$/,""));
+
 		//set the formatted value back in the editor
 		editorRef.current.setValue(formatted)
+	};
 
-	}
 	const onEditorMount: OnMount = (editor, _monaco) => {
 
 		editorRef.current = editor;
 		editor.onDidChangeModelContent(() => onChange(editor.getValue()));
 	};
 
-	return <div>
-		<button onClick={onFormatClick}>Format</button>
+	return <div className={`${styles['editor-wrapper']}`}>
+		<button
+			className={`button ${styles['button-format']} is-primary is-small`}
+			onClick={onFormatClick}>Format</button>
 		<MonacoEditor
-
 			onMount={onEditorMount}
 			value={initialValue}
 			theme="vs-dark"
