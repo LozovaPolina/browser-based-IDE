@@ -2,11 +2,11 @@ import * as esbuild from 'esbuild-wasm';
 import React, {ChangeEvent, useCallback, useEffect, useRef, useState} from 'react';
 import {unpkgPathPlugin} from "./plugins/unpkg-path-plugin";
 import {fetchPlugin} from "./plugins/fetch-plugin";
+import CodeEditor from "./components/code-editor";
 
 const App = () => {
 	const iframeRef = useRef<any>()
 	const [input, setInput] = useState('');
-	// const [code, setCode] = useState('');
 
 	const esbuildInitializedRef = useRef<Boolean>(false);
 
@@ -47,7 +47,6 @@ const App = () => {
 				}
 			});
 
-			// setCode(res.outputFiles[0].text)
 
 			iframeRef.current.contentWindow.postMessage(res.outputFiles[0].text, '*')
 		}catch(err){
@@ -77,13 +76,13 @@ const App = () => {
 
 
 	return (
-
 		<div>
+			<CodeEditor />
 			<textarea value={input} onChange={(e:ChangeEvent<HTMLTextAreaElement>) => setInput(e.target.value)}></textarea>
 			<div>
 				<button onClick={onClickHandler}>Submit</button>
 			</div>
-			{/*<pre>{code}</pre>*/}
+
 			<iframe ref={iframeRef} title='users-code' srcDoc={html} sandbox='allow-scripts'/>
 		</div>
 	);
