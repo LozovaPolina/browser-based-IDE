@@ -77,7 +77,7 @@ const App = () => {
 
 	return (
 		<div>
-			<CodeEditor />
+			<CodeEditor onChange={(value) => setInput(value)} initialValue='const i = 1' />
 			<textarea value={input} onChange={(e:ChangeEvent<HTMLTextAreaElement>) => setInput(e.target.value)}></textarea>
 			<div>
 				<button onClick={onClickHandler}>Submit</button>
