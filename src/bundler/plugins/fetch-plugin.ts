@@ -65,30 +65,29 @@ export const fetchPlugin = (inputCode: string) => {
 
 			build.onLoad({ filter: /.*/ }, async (args: any) => {
 				console.log('onLoad', args);
-					try{
-						const res = await fetch(args.path);
+				try{
+					const res = await fetch(args.path);
 
-						if(!res.ok) {
-							throw new Error('Could not ot fetch the data!');
-						}
-
-						const resData = await res.text();
-						// console.log(resData, 'resData');
-
-						const result: esbuild.OnLoadResult = {
-							loader: 'jsx',
-							contents:resData,
-							resolveDir: new URL ('./', res.url ).pathname
-						};
-
-						// store resData in cache
-						await fileCache.setItem(args.path, result);
-
-						return result;
-					}catch (err) {
-						console.log(err)
+					if(!res.ok) {
+						throw new Error('Could not ot fetch the data!');
 					}
 
+					const resData = await res.text();
+					// console.log(resData, 'resData');
+
+					const result: esbuild.OnLoadResult = {
+						loader: 'jsx',
+						contents:resData,
+						resolveDir: new URL ('./', res.url ).pathname
+					};
+
+					// store resData in cache
+					await fileCache.setItem(args.path, result);
+
+					return result;
+				}catch (err) {
+					console.log(err)
+				}
 			});
 		}
 	}

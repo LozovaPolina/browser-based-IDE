@@ -1,11 +1,6 @@
 import * as esbuild from 'esbuild-wasm';
-import * as localForage from "localforage";
 
 const URL_UNPKG = 'https://unpkg.com';
-
-
-
-
 
 export const unpkgPathPlugin = () => {
 	return {
@@ -27,8 +22,6 @@ export const unpkgPathPlugin = () => {
 						path: `https://unpkg.com/${args.path}`
 					};
 			});
-
-
 		},
 	};
 };
