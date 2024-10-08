@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import bundle from "../bundler";
 import CodeEditor from "./code-editor";
 import Preview from "./preview";
@@ -6,12 +6,23 @@ import Resizable from "./resizable";
 
 const CodeCell = () => {
 	const [input, setInput] = useState('');
-	const [code,setCode] = useState('')
+	const [code,setCode] = useState('');
 
-	const onClickHandler = async () => {
-		const output = await bundle(input);
-		if(output) setCode(output);
-	};
+
+	useEffect(()=> {
+		let timer = setTimeout(async ()=> {
+			const output = await bundle(input);
+			if(!output) {
+				return console.error('Output is undefined');
+			}
+			setCode(output);
+		},700);
+
+		return () => {
+			console.log('hi from timer')
+			clearTimeout(timer)
+		}
+	},[input])
 
 	return (
 		<Resizable direction={'vertical'}>

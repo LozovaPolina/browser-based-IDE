@@ -8,14 +8,14 @@ const html = `
 		<html lang="en">
 			<head></head>
 			<body>
-				<div id="user-root"></div>
+				<div id="root"></div>
 				<script>
 					window.addEventListener('message', (e) => {
 						try{
 							eval(e.data);
 						}catch (err) {
 							console.error(err);
-							const userRoot = document.querySelector('#user-root');
+							const userRoot = document.querySelector('#root');
 							userRoot.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + err + '</div>'
 						}
 					},false);
@@ -29,7 +29,10 @@ const Preview: React.FC<PreviewProps> = ({code}) => {
 
 	useEffect(()=> {
 		iframeRef.current.srcdoc = html;
-		iframeRef.current.contentWindow.postMessage(code, '*')
+		setTimeout(()=> {
+			iframeRef.current.contentWindow.postMessage(code, '*');
+		}, 50);
+
 	},[code]);
 
 
