@@ -19,8 +19,7 @@ export const store = legacy_createStore(
   {},
   composeWithDevTools(middlewareEnhancers),
 );
-store.subscribe(() => {
-  console.log(store.getState());
-});
-store.dispatch(insertCellBeforeAction({ id: null, type: "code" }));
-store.dispatch(deleteCell("5m4"));
+
+export type AppDispatch = typeof store.dispatch;
+
+export type RootState = ReturnType<typeof store.getState>;
