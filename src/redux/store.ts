@@ -21,5 +21,9 @@ export const store = legacy_createStore(
 );
 
 export type AppDispatch = typeof store.dispatch;
-
 export type RootState = ReturnType<typeof store.getState>;
+
+store.subscribe(() => console.log(store.getState()));
+store.dispatch(insertCellBeforeAction({ id: null, type: "code" }));
+store.dispatch(insertCellBeforeAction({ id: null, type: "text" }));
+store.dispatch(insertCellBeforeAction({ id: null, type: "code" }));

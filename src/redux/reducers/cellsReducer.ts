@@ -1,6 +1,6 @@
 import { ActionTypes } from "../action-types";
 import { Action } from "../actions";
-import { Cell } from "../cell";
+import { Cell } from "../../types/cell";
 
 type CellsState = {
   loading: boolean;
