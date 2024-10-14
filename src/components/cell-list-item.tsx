@@ -10,7 +10,11 @@ type CellListItemProps = {
 const CellListItem: React.FC<CellListItemProps> = ({ cell }) => {
   console.log(cell);
   const content: ReactNode =
-    cell.type === "code" ? <CodeCell /> : <TextEditor />;
+    cell.type === "code" ? (
+      <CodeCell cell={cell} />
+    ) : (
+      <TextEditor cell={cell} />
+    );
   return <div>{content}</div>;
 };
 

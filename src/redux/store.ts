@@ -7,9 +7,8 @@ import {
 import { composeWithDevTools } from "redux-devtools-extension";
 import { thunk } from "redux-thunk";
 import reducers from "./reducers";
-import { ActionTypes } from "./action-types";
-import { deleteCell, insertCellBeforeAction } from "./action-creators";
-import { Action } from "./actions";
+
+import { insertCellBeforeAction } from "./action-creators";
 
 const middlewares = [thunk];
 
