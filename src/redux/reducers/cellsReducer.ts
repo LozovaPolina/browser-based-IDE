@@ -70,19 +70,19 @@ const reducer = (state: CellsState = initialState, action: Action) => {
       };
     }
 
-    case ActionTypes.INSERT_CELL_BEFORE: {
+    case ActionTypes.INSERT_CELL_AFTER: {
       const newCell: Cell = {
         content: "",
         type: action.payload.type,
         id: randomId(),
       };
-      const orderArray = [...state.order];
+      let orderArray = [...state.order];
       const index = state.order.findIndex((id) => id === action.payload.id);
 
       if (index === -1) {
-        orderArray.push(newCell.id);
+        orderArray.unshift(newCell.id);
       } else {
-        orderArray.splice(index, 0, newCell.id);
+        orderArray.splice(index + 1, 0, newCell.id);
       }
 
       return {

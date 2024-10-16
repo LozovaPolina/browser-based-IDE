@@ -11,8 +11,8 @@ type DeleteCellAction = {
   type: ActionTypes.DELETE_CELL;
   payload: string;
 };
-type InsertCellBeforeAction = {
-  type: ActionTypes.INSERT_CELL_BEFORE;
+type InsertCellAfterAction = {
+  type: ActionTypes.INSERT_CELL_AFTER;
   payload: { id: string | null; type: CellTypes };
 };
 type UpdateCellAction = {
@@ -22,13 +22,13 @@ type UpdateCellAction = {
 type Action =
   | MoveCellAction
   | DeleteCellAction
-  | InsertCellBeforeAction
+  | InsertCellAfterAction
   | UpdateCellAction;
 
 export {
   type MoveCellAction,
   type DeleteCellAction,
-  type InsertCellBeforeAction,
+  type InsertCellAfterAction,
   type UpdateCellAction,
   type Action,
 };
