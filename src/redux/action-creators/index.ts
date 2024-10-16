@@ -32,7 +32,7 @@ export const moveCell = (
   };
 };
 
-export const insertCellBeforeAction = (
+export const insertCellAfterAction = (
   payload: InsertCellAfterAction["payload"],
 ): InsertCellAfterAction => {
   return {

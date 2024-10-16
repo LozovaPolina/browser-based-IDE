@@ -3,12 +3,12 @@ import styles from "./add-cell.module.css";
 import { useActions } from "../hooks/use-action";
 
 type AddCellProps = {
-  nextCellId: string | null;
+  prevCellId: string | null;
   visible?: boolean;
 };
 
-const AddCell: React.FC<AddCellProps> = ({ nextCellId, visible = false }) => {
-  const { insertCellBeforeAction } = useActions();
+const AddCell: React.FC<AddCellProps> = ({ prevCellId, visible = false }) => {
+  const { insertCellAfterAction } = useActions();
 
   return (
     <div
@@ -18,7 +18,7 @@ const AddCell: React.FC<AddCellProps> = ({ nextCellId, visible = false }) => {
         <button
           className={"button is-primary is-rounded is-small"}
           onClick={() =>
-            insertCellBeforeAction({ id: nextCellId, type: "code" })
+            insertCellAfterAction({ id: prevCellId, type: "code" })
           }
         >
           <span className={"icon is-small"}>
@@ -30,7 +30,7 @@ const AddCell: React.FC<AddCellProps> = ({ nextCellId, visible = false }) => {
         <button
           className={"button is-rounded is-small "}
           onClick={() =>
-            insertCellBeforeAction({ id: nextCellId, type: "text" })
+            insertCellAfterAction({ id: prevCellId, type: "text" })
           }
         >
           <span className={"icon is-small"}>

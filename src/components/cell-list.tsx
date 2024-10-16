@@ -18,19 +18,19 @@ const CellList: React.FC = () => {
       <div>
         <h2>Oops. Your cells list is empty.</h2>
         <p>Create new cell</p>
-        <AddCell nextCellId={null} visible={true} />
+        <AddCell prevCellId={null} visible={true} />
       </div>
     );
   } else if (orderedCells.length > 0) {
     content = (
       <>
+        <AddCell prevCellId={null} />
         {orderedCells.map((cell) => (
           <Fragment key={cell.id}>
-            <AddCell nextCellId={cell.id} />
             <CellListItem cell={cell} />
+            <AddCell prevCellId={cell.id} />
           </Fragment>
         ))}
-        <AddCell nextCellId={null} />
       </>
     );
   }
