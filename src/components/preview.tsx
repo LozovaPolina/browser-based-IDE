@@ -1,10 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import "./preview.css";
+import { useTypedSelector } from "../hooks/use-typed-selector";
+import { selectBundlesData } from "../redux/selectors";
 
-type PreviewProps = {
-  code: string;
-  bundlingError: string;
-};
 const html = `
 		<html lang="en">
 			<head></head>
@@ -31,17 +29,28 @@ const html = `
 			</body>
 		</html>	
 	`;
-
-const Preview: React.FC<PreviewProps> = ({ code, bundlingError }) => {
+type PreviewProps = {
+  cellId: string;
+};
+const Preview: React.FC<PreviewProps> = ({ cellId }) => {
   const iframeRef = useRef<any>();
+  const bundle = useTypedSelector((state) => {
+    return selectBundlesData(state, cellId);
+  });
 
+  // console.log(bundle.code, bundle.err);
   useEffect(() => {
-    iframeRef.current.srcdoc = html;
-    setTimeout(() => {
-      iframeRef.current.contentWindow.postMessage(code, "*");
-    }, 50);
-  }, [code]);
+    if (bundle) {
+      iframeRef.current.srcdoc = html;
+      setTimeout(() => {
+        iframeRef.current.contentWindow.postMessage(bundle.code, "*");
+      }, 50);
+    }
+  }, [bundle?.code]);
 
+  if (!bundle) {
+    return null;
+  }
   return (
     <div className="preview-wrapper">
       <iframe
@@ -50,7 +59,7 @@ const Preview: React.FC<PreviewProps> = ({ code, bundlingError }) => {
         srcDoc={html}
         sandbox="allow-scripts"
       />
-      {bundlingError && <div className={"preview-error"}>{bundlingError}</div>}
+      {bundle.err && <div className={"preview-error"}>{bundle.err}</div>}
     </div>
   );
 };

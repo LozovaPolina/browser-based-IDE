@@ -14,5 +14,3 @@ export const store = legacy_createStore(
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
-
-store.subscribe(() => console.log(store.getState()));

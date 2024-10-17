@@ -1,5 +1,5 @@
 import { ActionTypes } from "../action-types";
-import { CellTypes } from "../../types";
+import { Cell, CellTypes } from "../../types";
 
 type Direction = "up" | "down";
 
@@ -19,16 +19,35 @@ type UpdateCellAction = {
   type: ActionTypes.UPDATE_CELL;
   payload: { id: string; content: string };
 };
+type BundleStartAction = {
+  type: ActionTypes.BUNDLE_START;
+  payload: {
+    cellId: Cell["id"];
+  };
+};
+type BundleCompleteAction = {
+  type: ActionTypes.BUNDLE_COMPLETE;
+  payload: {
+    cellId: Cell["id"];
+    bundle: {
+      code: string;
+      err: string;
+    };
+  };
+};
 type Action =
   | MoveCellAction
   | DeleteCellAction
   | InsertCellAfterAction
-  | UpdateCellAction;
-
+  | UpdateCellAction
+  | BundleStartAction
+  | BundleCompleteAction;
 export {
   type MoveCellAction,
   type DeleteCellAction,
   type InsertCellAfterAction,
   type UpdateCellAction,
+  type BundleStartAction,
+  type BundleCompleteAction,
   type Action,
 };
