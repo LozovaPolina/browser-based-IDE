@@ -30,27 +30,20 @@ const html = `
 		</html>	
 	`;
 type PreviewProps = {
-  cellId: string;
+  code: string;
+  err: string;
 };
-const Preview: React.FC<PreviewProps> = ({ cellId }) => {
+const Preview: React.FC<PreviewProps> = ({ code, err }) => {
   const iframeRef = useRef<any>();
-  const bundle = useTypedSelector((state) => {
-    return selectBundlesData(state, cellId);
-  });
 
   // console.log(bundle.code, bundle.err);
   useEffect(() => {
-    if (bundle) {
-      iframeRef.current.srcdoc = html;
-      setTimeout(() => {
-        iframeRef.current.contentWindow.postMessage(bundle.code, "*");
-      }, 50);
-    }
-  }, [bundle?.code]);
+    iframeRef.current.srcdoc = html;
+    setTimeout(() => {
+      iframeRef.current.contentWindow.postMessage(code, "*");
+    }, 50);
+  }, [code]);
 
-  if (!bundle) {
-    return null;
-  }
   return (
     <div className="preview-wrapper">
       <iframe
@@ -59,7 +52,7 @@ const Preview: React.FC<PreviewProps> = ({ cellId }) => {
         srcDoc={html}
         sandbox="allow-scripts"
       />
-      {bundle.err && <div className={"preview-error"}>{bundle.err}</div>}
+      {err && <div className={"preview-error"}>{err}</div>}
     </div>
   );
 };

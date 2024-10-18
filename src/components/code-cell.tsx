@@ -4,7 +4,9 @@ import Preview from "./preview";
 import Resizable from "./resizable";
 import { type Cell } from "../types";
 import { useActions } from "../hooks/use-action";
-import bundle from "../bundler";
+import { useTypedSelector } from "../hooks/use-typed-selector";
+import { selectBundlesData } from "../redux/selectors";
+import ProgressBar from "./UI/progress-bar";
 
 type CodeCellProps = {
   cell: Cell;
@@ -13,12 +15,17 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   const { id, content } = cell;
   const { updateCell, createBundle } = useActions();
 
+  const bundleItem = useTypedSelector((state) => {
+    return selectBundlesData(state, cell.id);
+  });
+
   useEffect(() => {
+    if (!bundleItem) {
+      createBundle(id, content);
+      return;
+    }
+
     let timer = setTimeout(async () => {
-      if (!bundle) {
-        createBundle(id, content);
-        return;
-      }
       createBundle(id, content);
     }, 750);
 
@@ -40,7 +47,11 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
             initialValue={content}
           />
         </Resizable>
-        <Preview cellId={id} />
+        {!bundleItem || bundleItem.loading ? (
+          <ProgressBar />
+        ) : (
+          <Preview code={bundleItem.code} err={bundleItem.err} />
+        )}
       </div>
     </Resizable>
   );
