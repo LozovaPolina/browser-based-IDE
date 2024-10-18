@@ -5,7 +5,7 @@ import Resizable from "./resizable";
 import { type Cell } from "../types";
 import { useActions } from "../hooks/use-action";
 import { useTypedSelector } from "../hooks/use-typed-selector";
-import { selectBundlesData } from "../redux/selectors";
+import { selectBundlesData, selectCumulativeCode } from "../redux/selectors";
 import ProgressBar from "./UI/progress-bar";
 
 type CodeCellProps = {
@@ -18,7 +18,11 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   const bundleItem = useTypedSelector((state) => {
     return selectBundlesData(state, cell.id);
   });
+  const cumulativeCode = useTypedSelector((state) =>
+    selectCumulativeCode(state, cell.id),
+  );
 
+  console.log(cumulativeCode);
   useEffect(() => {
     if (!bundleItem) {
       createBundle(id, content);
