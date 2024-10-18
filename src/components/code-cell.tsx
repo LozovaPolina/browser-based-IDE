@@ -20,21 +20,20 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   });
   const cumulativeCode = useTypedSelector((state) =>
     selectCumulativeCode(state, cell.id),
-  );
+  ).join("\n");
 
-  console.log(cumulativeCode);
   useEffect(() => {
     if (!bundleItem) {
-      createBundle(id, content);
+      createBundle(id, cumulativeCode);
       return;
     }
 
     let timer = setTimeout(async () => {
-      createBundle(id, content);
+      createBundle(id, cumulativeCode);
     }, 750);
 
     return () => clearTimeout(timer);
-  }, [content, id, createBundle]);
+  }, [cumulativeCode, id, createBundle]);
 
   return (
     <Resizable direction={"vertical"}>
