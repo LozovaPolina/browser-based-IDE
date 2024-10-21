@@ -3,6 +3,7 @@ import { useTypedSelector } from "../hooks/use-typed-selector";
 import { selectCellsData, selectCellsOrder } from "../redux/selectors";
 import CellListItem from "./cell-list-item";
 import AddCell from "./add-cell";
+import styles from "./cell-list.module.css";
 
 const CellList: React.FC = () => {
   const order = useTypedSelector(selectCellsOrder);
@@ -34,7 +35,7 @@ const CellList: React.FC = () => {
       </>
     );
   }
-  return <div>{content}</div>;
+  return <div className={styles["cell-list"]}>{content}</div>;
 };
 
 export default CellList;
