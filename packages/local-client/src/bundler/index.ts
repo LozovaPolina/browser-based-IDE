@@ -17,7 +17,7 @@ const bundle = async (rawCode: string) => {
     }
 
     const res = await esbuild.build({
-      entryPoints: ["index.js"],
+      entryPoints: ["index.ts"],
       bundle: true,
       write: false,
       plugins: [unpkgPathPlugin(), fetchPlugin(rawCode)],
