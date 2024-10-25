@@ -4,6 +4,7 @@ import { selectCellsData, selectCellsOrder } from "../redux/selectors";
 import CellListItem from "./cell-list-item";
 import AddCell from "./add-cell";
 import styles from "./cell-list.module.css";
+import ErrorBlock from "./UI/error-block";
 
 const CellList: React.FC = () => {
   const order = useTypedSelector(selectCellsOrder);
@@ -16,11 +17,13 @@ const CellList: React.FC = () => {
 
   if (orderedCells.length <= 0) {
     content = (
-      <div>
-        <h2>Oops. Your cells list is empty.</h2>
-        <p>Create new cell</p>
+      <>
+        <ErrorBlock
+          message={"Oops. Your cells list is empty."}
+          description={"Create new cell"}
+        />
         <AddCell prevCellId={null} visible={true} />
-      </div>
+      </>
     );
   } else if (orderedCells.length > 0) {
     content = (
