@@ -23,6 +23,29 @@ const randomId = () => {
 
 const reducer = (state: CellsState = initialState, action: Action) => {
   switch (action.type) {
+    case ActionTypes.FETCH_CELLS: {
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    }
+    case ActionTypes.FETCH_CELLS_COMPLETE: {
+      return {
+        ...state,
+        order: action.payload.map((cell) => cell.id),
+        data: action.payload.reduce(
+          (acc, cell) => {
+            acc[cell.id] = cell;
+            return acc;
+          },
+          {} as CellsState["data"],
+        ),
+      };
+    }
+    case ActionTypes.FETCH_CELLS_ERROR: {
+      return { ...state, loading: false, error: action.payload };
+    }
     case ActionTypes.UPDATE_CELL: {
       const { content, id } = action.payload;
       return {

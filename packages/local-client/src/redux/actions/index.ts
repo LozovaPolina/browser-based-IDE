@@ -35,13 +35,29 @@ type BundleCompleteAction = {
     };
   };
 };
+
+type FetchCellsAction = {
+  type: ActionTypes.FETCH_CELLS;
+};
+type FetchCellsCompleteAction = {
+  type: ActionTypes.FETCH_CELLS_COMPLETE;
+  payload: Cell[];
+};
+type FetchCellsErrorAction = {
+  type: ActionTypes.FETCH_CELLS_ERROR;
+  payload: string;
+};
+
 type Action =
   | MoveCellAction
   | DeleteCellAction
   | InsertCellAfterAction
   | UpdateCellAction
   | BundleStartAction
-  | BundleCompleteAction;
+  | BundleCompleteAction
+  | FetchCellsAction
+  | FetchCellsCompleteAction
+  | FetchCellsErrorAction;
 export {
   type MoveCellAction,
   type DeleteCellAction,
@@ -50,4 +66,7 @@ export {
   type BundleStartAction,
   type BundleCompleteAction,
   type Action,
+  type FetchCellsAction,
+  type FetchCellsCompleteAction,
+  type FetchCellsErrorAction,
 };
